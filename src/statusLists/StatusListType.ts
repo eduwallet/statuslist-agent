@@ -205,7 +205,7 @@ export class StatusListType implements StatusListInterface {
     {
         let retval:number = 0;
         for(let i = 0;i < bitSize; i++) {
-            const bitval = bitString.get(index + i);
+            const bitval = bitString.get((index * bitSize) + i);
             retval = (retval << 1) | (bitval ? 1 : 0);
         }
         return retval;
@@ -216,7 +216,7 @@ export class StatusListType implements StatusListInterface {
         for(let i = 0;i < bitSize; i++) {
             // MSB first
             const valueToSet = ((state & (1 << (bitSize - i - 1))) != 0)  ? true : false;
-            bitString.set(index + i, valueToSet);
+            bitString.set((index * bitSize) + i, valueToSet);
         }
     }
 

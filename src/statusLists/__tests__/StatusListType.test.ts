@@ -281,3 +281,109 @@ test("Bitsize 4", async () => {
     value = await Stype.getState(lst, 999);
     expect(value).toBe(3); // was 2, + 3^15
 });
+
+test("Use correct index", async () => {
+    const lst = await createBasicStatusList(4);
+
+    // reserve a bit
+    var dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:lst.content})});
+    dataList.set(1, true);
+    dataList.set(2, true);
+    dataList.set(3, true);
+    dataList.set(4, true);
+    dataList.set(5, true);
+    dataList.set(6, true);
+    dataList.set(7, true);
+    dataList.set(8, true);
+    dataList.set(9, true);
+    dataList.set(10, true);
+    dataList.set(11, true);
+    dataList.set(12, true);
+    dataList.set(13, true);
+    // update the list content
+    lst.content = await dataList.encodeBits();
+
+    const Stype = new StatusListType({});
+    let value = await Stype.getState(lst, 1);
+    expect(value).toBe(0);
+    value = await Stype.getState(lst, 2);
+    expect(value).toBe(0);
+    value = await Stype.getState(lst, 3);
+    expect(value).toBe(0);
+    value = await Stype.getState(lst, 4);
+    expect(value).toBe(0);
+    value = await Stype.getState(lst, 5);
+    expect(value).toBe(0);
+    value = await Stype.getState(lst, 6);
+    expect(value).toBe(0);
+
+    let action = await Stype.setState(lst, 1, 15);
+    action = await Stype.setState(lst, 2, 0);
+    action = await Stype.setState(lst, 3, 15);
+    action = await Stype.setState(lst, 4, 0);
+    action = await Stype.setState(lst, 5, 15);
+    action = await Stype.setState(lst, 6, 0);
+
+    value = await Stype.getState(lst, 1);
+    expect(value).toBe(15);
+    value = await Stype.getState(lst, 2);
+    expect(value).toBe(0);
+    value = await Stype.getState(lst, 3);
+    expect(value).toBe(15);
+    value = await Stype.getState(lst, 4);
+    expect(value).toBe(0);
+    value = await Stype.getState(lst, 5);
+    expect(value).toBe(15);
+    value = await Stype.getState(lst, 6);
+    expect(value).toBe(0);
+
+    action = await Stype.setState(lst, 1, 0);
+    action = await Stype.setState(lst, 2, 15);
+    action = await Stype.setState(lst, 3, 0);
+    action = await Stype.setState(lst, 4, 15);
+    action = await Stype.setState(lst, 5, 0);
+    action = await Stype.setState(lst, 6, 15);
+
+    value = await Stype.getState(lst, 1);
+    expect(value).toBe(0);
+    value = await Stype.getState(lst, 2);
+    expect(value).toBe(15);
+    value = await Stype.getState(lst, 3);
+    expect(value).toBe(0);
+    value = await Stype.getState(lst, 4);
+    expect(value).toBe(15);
+    value = await Stype.getState(lst, 5);
+    expect(value).toBe(0);
+    value = await Stype.getState(lst, 6);
+    expect(value).toBe(15);
+
+    // hack a smaller bitsize
+    lst.bitsize = 2;
+    value = await Stype.getState(lst, 1); // offset 1 is halfway the previous index 0
+    expect(value).toBe(0);
+    value = await Stype.getState(lst, 2);
+    expect(value).toBe(0);
+    value = await Stype.getState(lst, 3);
+    expect(value).toBe(0);
+    value = await Stype.getState(lst, 4);
+    expect(value).toBe(3);
+    value = await Stype.getState(lst, 5);
+    expect(value).toBe(3);
+    value = await Stype.getState(lst, 6);
+    expect(value).toBe(0);
+    value = await Stype.getState(lst, 7);
+    expect(value).toBe(0);
+    value = await Stype.getState(lst, 8);
+    expect(value).toBe(3);
+    value = await Stype.getState(lst, 9);
+    expect(value).toBe(3);
+    value = await Stype.getState(lst, 10);
+    expect(value).toBe(0);
+    value = await Stype.getState(lst, 11);
+    expect(value).toBe(0);
+    value = await Stype.getState(lst, 12);
+    expect(value).toBe(3);
+    value = await Stype.getState(lst, 13);
+    expect(value).toBe(3);
+
+});
