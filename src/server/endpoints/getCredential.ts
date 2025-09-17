@@ -1,41 +1,37 @@
-import { agent } from 'agent';
 import { Router, Request, Response } from 'express';
 import { StatusListType } from 'statusLists/StatusListType';
-import moment from 'moment'
-import { CredentialPayload, ProofFormat } from '@veramo/core';
+import { statusListAsVC } from '../lib/statusListAsVC';
+import { statusListAsJWT } from '../lib/statusListAsJWT';
+import { StatusListStatus } from 'types';
+import moment from 'moment';
 
 export function getCredential(statusList:StatusListType, router:Router) {
     router!.get('/:index',
         async (request: Request, response: Response<string>) => {
             const list = await statusList.get(parseInt(request.params.index));
-            const key = await agent.keyManagerGet({kid: "anything"}).catch(() => null);
+            const status:StatusListStatus = {
+                type: statusList,
+                statusList: list,
+                basepath: statusList.id + '/' + list.index,
+                date: moment()
+            }
             try {
-                var basepath = statusList.id + '/' + list.index;
-                var statusListCredential = {
-                    "@context": [
-                        "https://www.w3.org/ns/credentials/v2",
-                    ],
-                    "id": basepath + '#list',
-                    "type": ["VerifiableCredential", "StatusList2021Credential"], // should be BitstringStatusListCredential
-                    "issuer": key!.kid,
-                    "validFrom": moment().format(moment.defaultFormatUtc),
-                    "credentialSubject": {
-                        "id": basepath + "#list",
-                        "type": "StatusList2021", // should be "BitstringStatusList",
-                        "statusPurpose": statusList.purpose,
-                        "encodedList": list.revoked
-                    }
+                let result:any = null;
+                switch (statusList.type) {
+                    case 'BitstringStatusList':
+                    case 'StatusList2020':
+                    case 'RevocationList2020':
+                    case 'SuspensionList2020':
+                    case 'StatusList2021':
+                    case 'RevocationList2021':
+                    case 'SuspensionList2021':
+                        result = await statusListAsVC(status);
+                        break;
+                    case 'statuslist+jwt':
+                        result = await statusListAsJWT(status);
+                        break;
                 }
-
-                let proofFormat: ProofFormat = 'jwt';          
-                const result = await agent.createVerifiableCredential({
-                  credential: statusListCredential as CredentialPayload,
-                  proofFormat,
-                  removeOriginalFields: false,
-                  fetchRemoteContexts: true,
-                  domain: key!.kid,
-                })
-                response.send(result.proof.jwt);
+                response.send(result);
 
             } catch (e) {
                 response.status(404).end('List not found');

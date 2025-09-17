@@ -2,10 +2,11 @@ import { Router, Request, Response } from 'express';
 import passport from 'passport';
 import { StatusListType } from 'statusLists/StatusListType';
 
-interface RevokeRequest {
+interface StatusRequest {
     list:string;
     index:number;
-    status:string;
+    status:number;
+    mask:number;
 }
 
 interface RevokeResponse {
@@ -20,10 +21,10 @@ interface RevokeResponse {
  * 
  * If the requested state is already the current state, we return UNCHANGED as state value.
  */
-export function revokeIndex(statusList:StatusListType, router:Router) {
-    router!.post('/api/revoke',
+export function setStatus(statusList:StatusListType, router:Router) {
+    router!.post('/api/status',
         passport.authenticate(statusList.name + '-admin', { session: false }),
-        async (request: Request<RevokeRequest>, response: Response<RevokeResponse>) => {
+        async (request: Request<StatusRequest>, response: Response<StatusResponse>) => {
             try {
                 const shouldStartWith = statusList.createCredentialUrl();
                 if (!request.body.list.startsWith(shouldStartWith)) {
@@ -31,7 +32,8 @@ export function revokeIndex(statusList:StatusListType, router:Router) {
                 }
                 const listIndex = parseInt(request.body.list.substring(shouldStartWith.length));
                 const list = await statusList.get(listIndex); // throws an exception if not found               
-                const revokeState = await statusList.revoke(list, parseInt(request.body.index), request.body.status == 'revoke');
+                const mask = request.body.mask ? parseInt(request.body.mask) : -1;
+                const revokeState = await statusList.setState(list, parseInt(request.body.index), parseInt(request.body.status), mask);
                 response.status(200).end(JSON.stringify({status:revokeState}));
             } catch (e) {
                 response.status(404).end('List not found');

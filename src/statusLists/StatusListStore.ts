@@ -1,6 +1,7 @@
 import { loadJsonFiles } from "@utils/loadJsonFiles";
 import { resolveConfPath } from "@utils/resolveConfPath";
-import { StatusListType, StatusListTypeOptions } from "./StatusListType";
+import { StatusListType } from "./StatusListType";
+import { StatusListTypeOptions } from "types";
 
 interface StatusListStore {
     [x:string]: StatusListType;

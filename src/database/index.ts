@@ -1,7 +1,7 @@
 import Debug from 'debug'
 import { DataSource } from 'typeorm'
 import { dbConfig } from './config';
-import { getEnv } from '@utils/getEnv';
+import { getEnv } from '../utils/getEnv';
 
 const debug = Debug(`statuslist:db`)
 const schema = getEnv('DB_SCHEMA', 'statuslist');

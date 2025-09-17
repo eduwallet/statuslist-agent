@@ -1,9 +1,7 @@
 import Debug from 'debug';
-import express, { Express, Router } from 'express';
+import express, { Router } from 'express';
 import morgan from 'morgan'
 import cors, { CorsOptions } from 'cors'
-//import { session, expressSession} from 'express-session'
-import passport, { InitializeOptions } from 'passport'
 import bodyParser from 'body-parser';
 import { createHttpTerminator } from 'http-terminator'
 import { getEnv } from '@utils/getEnv';
@@ -17,7 +15,6 @@ const debug = Debug(`eduwallet:server`)
 
 const PORT = Number.parseInt(getEnv('PORT', '5000'));
 const LISTEN_ADDRESS = getEnv('LISTEN_ADDRESS', '0.0.0.0');
-//const BASEURL = getEnv('BASEURL', 'https://status.dev.eduwallet.nl');
 
 function basicExpressServer() {
     const app = express();
@@ -53,9 +50,7 @@ export async function initialiseServer() {
     }
 
     debug("starting express server");
-    const server = app.listen(PORT, LISTEN_ADDRESS, () => {});
-    const terminator = createHttpTerminator({ server, gracefulTerminationTimeout: 10 });
-
+    app.listen(PORT, LISTEN_ADDRESS, () => {});
     dumpExpressRoutes(app);
 }
 

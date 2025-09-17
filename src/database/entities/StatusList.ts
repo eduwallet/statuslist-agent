@@ -29,6 +29,10 @@ export class StatusList extends BaseEntity {
     //@ts-ignore
     used: number
 
+    @Column({type: 'int', nullable:true})
+    //@ts-ignore
+    bitsize?: number
+
     @Column('text')
     //@ts-ignore
     content: string

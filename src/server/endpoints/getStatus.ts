@@ -15,12 +15,18 @@ export function getStatus(statusList:StatusListType, router:Router) {
         passport.authenticate(statusList.name + '-admin', { session: false }),
         async (request: Request, response: Response) => {
             try {
-                const list = statusList.get(parseInt(request.params.listindex));
-                if (await statusList.status(list, parseInt(request.params.credindex))) {
-                    response.status(200).end({"state":true});
+                const list = await statusList.get(parseInt(request.params.listindex));
+                const state = await statusList.getState(list, parseInt(request.params.credindex));
+                if ((list.bitsize ?? 1) == 1) {
+                    if (state) {
+                        response.status(200).end(JSON.stringify({"status":true}));
+                    }
+                    else {
+                        response.status(200).end(JSON.stringify({"status":false}));
+                    }
                 }
                 else {
-                    response.status(200).end({"state":false});
+                    response.status(200).end(JSON.stringify({"status":state}));
                 }
             } catch (e) {
                 response.status(404).end('List not found');

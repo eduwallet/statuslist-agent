@@ -1,4 +1,4 @@
-import { getEnv } from '@utils/getEnv';
+import { getEnv } from '../utils/getEnv';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
 import { StatusList } from './entities/StatusList';
 import { migrations } from './migrations';

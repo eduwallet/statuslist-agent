@@ -1,6 +1,7 @@
-import { Express } from 'express'
+import { Express, Router } from 'express'
 
 function print (path:any, layer:any) {
+    path = path || layer.path;
     if (layer.route) {
       layer.route.stack.forEach(print.bind(null, path.concat(split(layer.route.path))))
     } else if (layer.name === 'router' && layer.handle.stack) {
@@ -15,9 +16,9 @@ function print (path:any, layer:any) {
   function split (thing:any) {
     if (typeof thing === 'string') {
       return thing.split('/')
-    } else if (thing.fast_slash) {
+    } else if (thing?.fast_slash) {
       return ''
-    } else {
+    } else if(thing) {
       var match = thing.toString()
         .replace('\\/?', '')
         .replace('(?=\\/|$)', '$')
@@ -29,5 +30,6 @@ function print (path:any, layer:any) {
   }
   
 export const dumpExpressRoutes = (app:Express) => {
-    app._router.stack.forEach(print.bind(null, []));
+    const router:Router = app.router as unknown as Router;
+    router.stack.forEach(print.bind(null, []));
 }

@@ -1,7 +1,9 @@
 import { getEnv } from '@utils/getEnv';
 import { Router, Request, Response } from 'express';
+import { stat } from 'fs';
 import moment from 'moment';
 import passport from 'passport';
+import { createStatusCredential } from 'server/lib/createStatusCredential';
 import { StatusListType } from 'statusLists/StatusListType';
 
 interface ListIndexRequest {
@@ -9,11 +11,10 @@ interface ListIndexRequest {
 }
 
 interface ListIndexResponse {
+    credentialStatus: any;
     index: number;
-    purpose: string;
-    size: number;
-    id: string;
-    url: string;
+    list: number;
+    type: string;
 }
 
 /* Request a new index from the indicated statuslist type
@@ -30,12 +31,12 @@ export function getListIndex(statusList:StatusListType, router:Router) {
             try {
                 const date = moment(request.body.expirationDate).toDate();
                 const { list, index } = await statusList.newIndex(date);
+
                 var retval:ListIndexResponse = {
+                    credentialStatus: createStatusCredential(statusList, list, index),
                     index: index,
-                    purpose: statusList.purpose,
-                    size: list.size,
-                    id: statusList.id + '/' + list.index + '#' + index,
-                    url: statusList.createCredentialUrl(list.index)
+                    list: list.index,
+                    type: statusList.type
                 }
                 response.send(retval);
             } catch (e) {
