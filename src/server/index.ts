@@ -10,6 +10,7 @@ import { getStatusListStore } from 'statusLists/StatusListStore';
 import { getDidSpec } from './endpoints/getDidSpec';
 import { createRoutes } from './createRoutes';
 import { bearerAdmin } from './bearerAdmin';
+import { createRoutesForAdmin } from './admin/createRoutesForAdmin';
 
 const debug = Debug(`eduwallet:server`)
 
@@ -47,6 +48,7 @@ export async function initialiseServer() {
         const data = store[name];
         bearerAdmin(data);
         createRoutes(data, app);
+        await createRoutesForAdmin(app);
     }
 
     debug("starting express server");

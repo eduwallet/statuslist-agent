@@ -2,6 +2,7 @@ import { getEnv } from '../utils/getEnv';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
 import { StatusList } from './entities/StatusList';
 import { migrations } from './migrations';
+import { Configuration } from './entities/Configuration';
 
 const schema = getEnv('DB_SCHEMA', 'statuslist');
 const database = getEnv('DB_NAME', 'postgres');
@@ -19,7 +20,7 @@ export const dbConfig: PostgresConnectionOptions = {
     password: password,
     database: database,
     applicationName: schema,
-    entities: [StatusList],
+    entities: [StatusList, Configuration],
     migrations: [...migrations],
     migrationsRun: false, // We run migrations from code to ensure proper ordering with Redux
     synchronize: false, // We do not enable synchronize, as we use migrations from code

@@ -9,7 +9,7 @@ import { setStatus } from './endpoints/setStatus';
 
 const debug = Debug(`statuslists:server`)
 
-export function createRoutes(statusList:StatusListType, app:Express) {
+export async function createRoutes(statusList:StatusListType, app:Express) {
     debug('creating routes for ', statusList.name);
 
     const router = express.Router();
