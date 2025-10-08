@@ -8,6 +8,7 @@
   "scripts": {
     "build": "tsc",
     "start": "tsx src/index.ts",
+    "watch": "tsx --watch src/index.ts",
     "key": "tsx src/scripts/generateKey.ts",
     "test": "vitest run",
     "lint": "eslint src --ext .ts"
