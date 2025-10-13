@@ -52,11 +52,11 @@ export class Configuration extends BaseEntity {
         this.updateDate = new Date()
     }
 
-    @Column({ type: 'timestamp', select: false })
+    @Column({ type: 'timestamp', select: true })
     //@ts-ignore
     saveDate: Date
 
-    @Column({ type: 'timestamp', select: false })
+    @Column({ type: 'timestamp', select: true })
     //@ts-ignore
     updateDate: Date
 }
