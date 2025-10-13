@@ -38,6 +38,8 @@ function basicExpressServer() {
 export async function initialiseServer() {
     const app = basicExpressServer();
 
+    await createRoutesForAdmin(app);
+
     // server our basic did:web configuration
     const router = Router();
     getDidSpec(router);
@@ -48,7 +50,6 @@ export async function initialiseServer() {
         const data = store[name];
         bearerAdmin(data);
         createRoutes(data, app);
-        await createRoutesForAdmin(app);
     }
 
     debug("starting express server");
