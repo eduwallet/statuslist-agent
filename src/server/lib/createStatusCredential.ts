@@ -6,6 +6,7 @@ export function createStatusCredential(statusList:StatusListType, list:StatusLis
     let credentialStatus:any;
     if (statusList.type == 'statuslist+jwt') {
         // IETF Token Status list
+        // https://www.ietf.org/archive/id/draft-ietf-oauth-status-list-13.html#name-referenced-token-in-jose
         credentialStatus = {
             idx: index,
             uri: statusList.createCredentialUrl(list.index)
