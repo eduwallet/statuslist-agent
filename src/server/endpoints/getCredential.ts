@@ -31,6 +31,7 @@ export function getCredential(statusList:StatusListType, router:Router) {
                         result = await statusListAsJWT(status);
                         break;
                 }
+                response.setHeader('Content-type', 'application/statuslist+jwt');
                 response.send(result);
 
             } catch (e) {

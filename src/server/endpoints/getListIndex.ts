@@ -15,6 +15,7 @@ interface ListIndexResponse {
     index: number;
     list: number;
     type: string;
+    purpose:string;
 }
 
 /* Request a new index from the indicated statuslist type
@@ -36,7 +37,8 @@ export function getListIndex(statusList:StatusListType, router:Router) {
                     credentialStatus: createStatusCredential(statusList, list, index),
                     index: index,
                     list: list.index,
-                    type: statusList.type
+                    type: statusList.type,
+                    purpose: statusList.purpose
                 }
                 response.send(retval);
             } catch (e) {
