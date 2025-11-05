@@ -1,7 +1,7 @@
 import { StatusListStatus } from "../../types";
 import moment from 'moment';
 import { Factory } from '@muisit/cryptokey';
-import { getKey } from "../../utils/keymanager";
+import { getDID, getKey } from "../../utils/keymanager";
 import { JWT } from "../../jwt/JWT";
 import { StatusListType } from "../../statusLists/StatusListType";
 
@@ -12,12 +12,13 @@ import { StatusListType } from "../../statusLists/StatusListType";
 export async function statusListAsVC(data:StatusListStatus) 
 {
     const key = getKey();
+    const did = getDID();
 
     var statusListCredential:any = {
         "@context": ["https://www.w3.org/ns/credentials/v2"],
         "id": data.basepath,
         "type": ["VerifiableCredential", data.type.getCredentialType()],
-        "issuer": await Factory.toDIDJWK(key!),
+        "issuer": did,
         "validFrom": moment(data.date).format(moment.defaultFormatUtc),
         "validUntil": moment(data.date).add(5,'minutes').format(moment.defaultFormatUtc),
         "issuedAt": moment(data.date).format(moment.defaultFormatUtc),
@@ -44,7 +45,8 @@ export async function statusListAsVC(data:StatusListStatus)
     // these headers, but they are not explicitely disallowed either
     jwt.header = {
         alg: key!.algorithms()[0],
-        kid: await Factory.toDIDJWK(key!) + '#0',
+        // kid is set by the signing action
+        //kid: did + '#' + Factory.getKeyReference(did),
         typ: 'jwt_vc_json', // should this be vc+jwt?
     };
 
@@ -52,7 +54,7 @@ export async function statusListAsVC(data:StatusListStatus)
     // Web Signature and Encryption Header Parameters registry to identify any claims and
     // header parameters that might be confused with members defined by [VC-DATA-MODEL-2.0].
     // These include but are not limited to: iss, kid, alg, iat, exp, and cnf. 
-    jwt.header.iss = await Factory.toDIDJWK(key!);
+    jwt.header.iss = did;
 
     // When the iat (Issued At) and/or exp (Expiration Time) JWT claims are present, they 
     // represent the issuance and expiration time of the signature, respectively.

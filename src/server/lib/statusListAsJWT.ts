@@ -1,4 +1,4 @@
-import { getKey } from '../../utils/keymanager';
+import { getDID, getKey } from '../../utils/keymanager';
 import { JWT } from '../../jwt/JWT';
 import moment from 'moment'
 import { StatusListStatus } from '../../types';
@@ -9,16 +9,19 @@ import { Factory } from '@muisit/cryptokey';
 export async function statusListAsJWT(data:StatusListStatus)
 {
     const key = getKey();
+    const did = getDID();
 
     const jwt = new JWT();
 
     jwt.header = {
         alg: key!.algorithms()[0],
-        kid: await Factory.toDIDJWK(key!) + '#0',
+        // kid is set by the signing action
+        //kid: did + '#' + Factory.getKeyReference(did),
         typ: 'statuslist+jwt',
     };
 
     jwt.payload = {
+        iss: did,
         exp: moment(data.date).add(15, 'minutes').unix(), // considered expired
         iat: moment(data.date).unix(),
         sub: data.basepath, // sub must specify the uri of the status list token
