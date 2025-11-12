@@ -356,4 +356,4 @@ The W3C BitstringStatusList implementation has credential type 'BitstringStatusL
 
 | Version | Commit  | Date       | Comment             |
 | ------- | ------- | ---------- | ------------------- |
-|         |         | 2025-11-12 | Implementation of encoded private keys. When using the functionality to use the same database as the veramo-issuer, make sure to configure the same `PASSPHRASE` as the veramo-issuer |
+|         | a2c4cbb | 2025-11-12 | Implementation of encoded private keys. When using the functionality to use the same database as the veramo-issuer, make sure to configure the same `PASSPHRASE` as the veramo-issuer |
