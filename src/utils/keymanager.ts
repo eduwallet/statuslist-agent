@@ -39,7 +39,8 @@ export async function loadKey()
           const dbKey = result.keys[0];
           const pkeys = db.getRepository(PrivateKey);
           const pkey = await pkeys.findOneBy({alias:dbKey.kid});
-          _key = await Factory.createFromType(dbKey.type, pkey?.privateKeyHex);
+          const decodedKey = await pkey?.decodeKey();
+          _key = await Factory.createFromType(dbKey.type, decodedKey);
           return;
         }
       }
