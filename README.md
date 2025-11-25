@@ -356,5 +356,6 @@ The W3C BitstringStatusList implementation has credential type 'BitstringStatusL
 
 | Version | Commit  | Date       | Comment             |
 | ------- | ------- | ---------- | ------------------- |
-|         |         | 2025-11-19 | Clearing configuration tables when `BEARER_TOKEN` is empty, enforcing file based configurations. This does not clear any related list tables, so any existing list whose configuration is removed is retained and will 'pop up' if the configuration is reinstated |
+|         | 68bc04e | 2025-11-25 | Implemented `/api/version` to display package and node version and git tag and commit number |
+|         | 1c0e456 | 2025-11-19 | Clearing configuration tables when `BEARER_TOKEN` is empty, enforcing file based configurations. This does not clear any related list tables, so any existing list whose configuration is removed is retained and will 'pop up' if the configuration is reinstated |
 |         | a2c4cbb | 2025-11-12 | Implementation of encoded private keys. When using the functionality to use the same database as the veramo-issuer, make sure to configure the same `PASSPHRASE` as the veramo-issuer |
