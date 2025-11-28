@@ -27,6 +27,10 @@ Then configure the tool using the supplied `.env.example`. The following options
 - PORT: port to listen to
 - LISTEN_ADDRESS: interface to listen to
 - BASEURL: base url for the agent
+- APP_KEY: key-type + private key for the agent key, OR a did or alias into the database identifier table
+- APP_DID: statuslist agent did name, if APP_KEY represents the key-type + private key
+- BEARER_TOKEN: token for access to the generic administrative API
+- PASSPHRASE: token to decode the encrypted private keys in the database (needs to match with the same PASSPHRASE of the issuer)
 
 Please note that the StatusList agent does not use a database to store did identifiers or key material. The only key stored is the generic statuslist agent did:web key, which is hosted at the `/.well-known/did.json` endpoint. The key data, including the private key, is stored in a local file, which should be properly protected from prying eyes.
 
@@ -51,6 +55,10 @@ npm run key Ed25519
 which generates a Ed25519 private key in hex encoded format and prints it to the console. Copy this into the `privateKeyHex` attribute.
 
 Please note that the `name` field in the key configuration specifies the `did:web` and as such contains a DNS name that must match the DNS name of the environment. If this does not match, add a reverse proxy configuration for the well-known path on the actual domain of the `did:web` to the statuslist agent well-known path.
+
+Alternatively, a combination of `APP_KEY` and `APP_DID` can be used to directly set the key material from the environment. 
+
+Additionally, if the statuslist agent is combined with the veramo-issuer implementation, the `APP_KEY` environment variable can be set to a did or alias into the `identifier` table of the veramo-issuer application, allowing the statuslist agent to use the same key material.
 
 ### StatusList configuration
 
@@ -343,3 +351,11 @@ The W3C implementations return a Virtual Credential JWT with a `credentialSubjec
 The 'old' W3C StatusList implementation has credential type 'StatusListCredential'. The `credentialSubject` type can be anything from `StatusList2020`, `SuspensionList2020` to `RevocationList2021`, etc. The `encodedList` is a base64url encoded gzip compressed representation of the bit string content.
 
 The W3C BitstringStatusList implementation has credential type 'BitstringStatusListCredential'. The `credentialSubject` type should be `BitstringStatusList`. The `encodedList` is a multibase base64url encoded gzip compressed representation of the bit string content. It is very similar to the W3C StatusList value, but preceded by the multibase `u` prefix to indicate the base64url encoding. The spec suggests a base58btc encoding can also be used, which would have a `z` prefix. This implementation only uses the base64url encoded version.
+
+# Changelog / Release Notes
+
+| Version | Commit  | Date       | Comment             |
+| ------- | ------- | ---------- | ------------------- |
+|         | 68bc04e | 2025-11-25 | Implemented `/api/version` to display package and node version and git tag and commit number |
+|         | 1c0e456 | 2025-11-19 | Clearing configuration tables when `BEARER_TOKEN` is empty, enforcing file based configurations. This does not clear any related list tables, so any existing list whose configuration is removed is retained and will 'pop up' if the configuration is reinstated |
+|         | a2c4cbb | 2025-11-12 | Implementation of encoded private keys. When using the functionality to use the same database as the veramo-issuer, make sure to configure the same `PASSPHRASE` as the veramo-issuer |

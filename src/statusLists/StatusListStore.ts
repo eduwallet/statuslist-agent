@@ -7,6 +7,7 @@ import { StatusListType } from "./StatusListType";
 import { StatusListTypeOptions } from "types";
 import { getDbConnection } from "database";
 import { Configuration } from "database/entities/Configuration";
+import { hasAdminBearerToken } from '@utils/adminBearerToken';
 
 interface StatusListStore {
     [x:string]: StatusListType;
@@ -18,7 +19,8 @@ export function getStatusListStore(): StatusListStore {
     return _store;
 }
 
-export async function initialiseStatusListStore() {
+async function readFromDB()
+{
     try {
         const dbConnection = await getDbConnection();
         const repo = dbConnection.getRepository(Configuration);
@@ -35,7 +37,30 @@ export async function initialiseStatusListStore() {
             };
             const data = new StatusListType(cfg);
             _store[obj.name] = data;
-        } 
+        }
+    }
+    catch (e) {
+        console.error("Caught exception initialising status list configurations", e);
+    }
+}
+
+async function clearDB()
+{
+    try {
+        const dbConnection = await getDbConnection();
+        const repo = dbConnection.getRepository(Configuration);
+        await repo.clear();
+    }
+    catch (e) {
+        console.error("Caught exception initialising status list configurations", e);
+    }
+}
+
+async function readFromFile()
+{
+    try {
+        const dbConnection = await getDbConnection();
+        const repo = dbConnection.getRepository(Configuration);
 
         try {
             const options = loadJsonFiles<StatusListTypeOptions>({path: resolveConfPath('lists')});
@@ -63,4 +88,14 @@ export async function initialiseStatusListStore() {
     catch (e) {
         console.error("Caught exception initialising status list configurations", e);
     }
+}
+
+export async function initialiseStatusListStore() {
+    if (hasAdminBearerToken()) {
+        await readFromDB();
+    }
+    else {
+        await clearDB();
+    }
+    await readFromFile();
 }
