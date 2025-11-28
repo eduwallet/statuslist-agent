@@ -1,8 +1,8 @@
 import { StatusListStatus } from "../../types";
 import moment from 'moment';
-import { Factory } from '@muisit/cryptokey';
 import { getDID, getKey } from "../../utils/keymanager";
-import { JWT } from "../../jwt/JWT";
+import { Factory } from "@muisit/cryptokey";
+import { JWT } from "@muisit/simplejwt";
 import { StatusListType } from "../../statusLists/StatusListType";
 
 // The old StatusList2020 implementation:
@@ -39,14 +39,13 @@ export async function statusListAsVC(data:StatusListStatus)
     }
 
     const jwt = new JWT();
-    jwt.payload = statusListCredential;
+    jwt.payload = statusListCredential || {};
 
     // typ and cty are only defined for JSON-LD. The JOSE definition does not mention
     // these headers, but they are not explicitely disallowed either
     jwt.header = {
         alg: key!.algorithms()[0],
-        // kid is set by the signing action
-        //kid: did + '#' + Factory.getKeyReference(did),
+        kid: did + '#' + Factory.getKeyReference(did),
         typ: 'jwt_vc_json', // should this be vc+jwt?
     };
 
@@ -58,9 +57,9 @@ export async function statusListAsVC(data:StatusListStatus)
 
     // When the iat (Issued At) and/or exp (Expiration Time) JWT claims are present, they 
     // represent the issuance and expiration time of the signature, respectively.
-    jwt.payload.iat = moment(data.date).unix();
-    jwt.payload.exp = moment(data.date).add(15, 'minutes').unix();
-    jwt.payload.jti = statusListCredential.id;
+    jwt.payload!.iat = moment(data.date).unix();
+    jwt.payload!.exp = moment(data.date).add(15, 'minutes').unix();
+    jwt.payload!.jti = statusListCredential.id;
 
     await jwt.sign(key!);
     return jwt.token;

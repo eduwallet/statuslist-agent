@@ -1,5 +1,5 @@
 import { getDID, getKey } from '../../utils/keymanager';
-import { JWT } from '../../jwt/JWT';
+import { JWT } from '@muisit/simplejwt';
 import moment from 'moment'
 import { StatusListStatus } from '../../types';
 import { StatusListType } from '../../statusLists/StatusListType';
@@ -15,8 +15,7 @@ export async function statusListAsJWT(data:StatusListStatus)
 
     jwt.header = {
         alg: key!.algorithms()[0],
-        // kid is set by the signing action
-        //kid: did + '#' + Factory.getKeyReference(did),
+        kid: did + '#' + Factory.getKeyReference(did),
         typ: 'statuslist+jwt',
     };
 

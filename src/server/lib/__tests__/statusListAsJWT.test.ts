@@ -10,6 +10,9 @@ vi.mock('../../../utils/keymanager.ts', () => ({
     getKey: vi.fn(() => {
         return testkey;
     }),
+    getDID: vi.fn(() => {
+        return "did:web:example.com";
+    })
   }));
 import { statusListAsJWT } from '../statusListAsJWT';
 
@@ -56,5 +59,5 @@ test("Creating JWT", async () => {
 
     const jwt = await statusListAsJWT(status);
     expect(jwt).toBeDefined();
-    expect(jwt).toBe('eyJhbGciOiJFZERTQSIsImtpZCI6IjVjMzE5YjhjMmQ0ODAzMjAyNjczZWQxYWIyNGJkMzQyNWI5MTRkNDI0ODE5NjdhYzRjZDkzY2NmYzdkZWNiMzkiLCJ0eXAiOiJzdGF0dXNsaXN0K2p3dCJ9.eyJleHAiOjE1Nzc4Mzc4MjMsImlhdCI6MTU3NzgzNjkyMywic3ViIjoiaHR0cHM6Ly9leGFtcGxlLmNvbSIsInR0bCI6MzAwLCJzdGF0dXNfbGlzdCI6eyJiaXRzIjoxLCJsc3QiOiJlSndUNEdCZ1lEQmdHSERBUkhVVEhRaklBd0JQTmdDTCJ9fQ.G7gaZyZNc90JL-f1sJVmemy7X-claKtk8R0LgKo4hR0dclN9osgRIP-7690GUcvkNzOrpZ1twwdLE9jSBGNeBg');
+    expect(jwt).toBe('eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDp3ZWI6ZXhhbXBsZS5jb20jMCIsInR5cCI6InN0YXR1c2xpc3Qrand0In0.eyJpc3MiOiJkaWQ6d2ViOmV4YW1wbGUuY29tIiwiZXhwIjoxNTc3ODM3ODIzLCJpYXQiOjE1Nzc4MzY5MjMsInN1YiI6Imh0dHBzOi8vZXhhbXBsZS5jb20iLCJ0dGwiOjMwMCwic3RhdHVzX2xpc3QiOnsiYml0cyI6MSwibHN0IjoiZUp3VDRHQmdZREJnR0hEQVJIVVRIUWpJQXdCUE5nQ0wifX0.Lh8dm2M0ooaNCi1r2TBbao_UPolpdFtCyAe4mivx_hJOsPaFxhdE6p-akEWDAMaph_smwwkkxMHvUvMU8V33Ag');
 });
