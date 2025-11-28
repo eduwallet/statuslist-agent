@@ -41,6 +41,8 @@ export async function loadKey()
           const pkey = await pkeys.findOneBy({alias:dbKey.kid});
           const decodedKey = await pkey?.decodeKey();
           _key = await Factory.createFromType(dbKey.type, decodedKey);
+          _did = result.did;
+          console.log('setting APP_DID to ', _did, ' from database');
           return;
         }
       }
