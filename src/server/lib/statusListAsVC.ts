@@ -1,3 +1,6 @@
+import Debug from 'debug';
+const debug = Debug('status:vc');
+
 import { StatusListStatus } from "../../types";
 import moment from 'moment';
 import { getDID, getKey } from "../../utils/keymanager";
@@ -13,6 +16,8 @@ export async function statusListAsVC(data:StatusListStatus)
 {
     const key = getKey();
     const did = getDID();
+
+    debug("Issuing status list credential as VC for list of updateDate", data.statusList.updateDate, moment(data.statusList.updateDate).format(moment.defaultFormatUtc));
 
     var statusListCredential:any = {
         "@context": ["https://www.w3.org/ns/credentials/v2"],
