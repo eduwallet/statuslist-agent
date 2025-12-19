@@ -57,7 +57,7 @@ export async function statusListAsVC(data:StatusListStatus)
 
     // When the iat (Issued At) and/or exp (Expiration Time) JWT claims are present, they 
     // represent the issuance and expiration time of the signature, respectively.
-    jwt.payload!.iat = moment(data.date).unix();
+    jwt.payload!.iat = moment(data.statusList.updateDate).unix();
     jwt.payload!.exp = moment(data.date).add(15, 'minutes').unix();
     jwt.payload!.jti = statusListCredential.id;
 

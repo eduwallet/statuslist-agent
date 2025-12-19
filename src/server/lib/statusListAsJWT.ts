@@ -22,7 +22,7 @@ export async function statusListAsJWT(data:StatusListStatus)
     jwt.payload = {
         iss: did,
         exp: moment(data.date).add(15, 'minutes').unix(), // considered expired
-        iat: moment(data.date).unix(),
+        iat: moment(data.statusList.updateDate).unix(),
         sub: data.basepath, // sub must specify the uri of the status list token
         ttl: 5 * 60, // maximum time to cache
         status_list: {
