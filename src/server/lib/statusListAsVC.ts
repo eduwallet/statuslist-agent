@@ -19,9 +19,9 @@ export async function statusListAsVC(data:StatusListStatus)
         "id": data.basepath,
         "type": ["VerifiableCredential", data.type.getCredentialType()],
         "issuer": did,
-        "validFrom": moment(data.date).format(moment.defaultFormatUtc),
+        "validFrom": moment(data.statusList.updateDate).format(moment.defaultFormatUtc),
         "validUntil": moment(data.date).add(5,'minutes').format(moment.defaultFormatUtc),
-        "issuedAt": moment(data.date).format(moment.defaultFormatUtc),
+        "issuedAt": moment(data.statusList.updateDate).format(moment.defaultFormatUtc),
         "credentialSubject": {
             "id": data.basepath + "#list",
             "type": data.type.type,
