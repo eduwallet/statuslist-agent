@@ -4,6 +4,7 @@ import express, { Express } from 'express'
 import { createConfiguration, deleteConfiguration, listConfigurations, storeConfiguration } from './lists';
 import { adminBearerToken, hasAdminBearerToken } from '@utils/adminBearerToken';
 import { getVersion } from './getVersion';
+import { exportConfig } from './exportConfig';
 
 function bearerAdminForAPI() {
     passport.use('admin-api', new Strategy(
@@ -34,7 +35,11 @@ export async function createRoutesForAdmin(app:Express) {
         () => {
             setTimeout(() => { process.exit(0)}, 2000);
         }
-    )
+    );
+    router.get('/export',
+        passport.authenticate('admin-api', { session: false }),
+        exportConfig
+    );
 
     router.get('/lists', 
         passport.authenticate('admin-api', { session: false }),
