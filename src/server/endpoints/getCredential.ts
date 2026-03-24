@@ -8,7 +8,7 @@ import moment from 'moment';
 export function getCredential(statusList:StatusListType, router:Router) {
     router!.get('/:index',
         async (request: Request, response: Response<string>) => {
-            const list = await statusList.get(parseInt(request.params.index));
+            const list = await statusList.get(parseInt(request.params.index as string));
             const status:StatusListStatus = {
                 type: statusList,
                 statusList: list,

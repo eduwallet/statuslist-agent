@@ -15,8 +15,8 @@ export function getStatus(statusList:StatusListType, router:Router) {
         passport.authenticate(statusList.name + '-admin', { session: false }),
         async (request: Request, response: Response) => {
             try {
-                const list = await statusList.get(parseInt(request.params.listindex));
-                const state = await statusList.getState(list, parseInt(request.params.credindex));
+                const list = await statusList.get(parseInt(request.params.listindex as string));
+                const state = await statusList.getState(list, parseInt(request.params.credindex as string));
                 if ((list.bitsize ?? 1) == 1) {
                     if (state) {
                         response.status(200).end(JSON.stringify({"status":true}));

@@ -24,7 +24,7 @@ interface RevokeResponse {
 export function setStatus(statusList:StatusListType, router:Router) {
     router!.post('/api/status',
         passport.authenticate(statusList.name + '-admin', { session: false }),
-        async (request: Request<StatusRequest>, response: Response<StatusResponse>) => {
+        async (request: Request<StatusRequest>, response: Response<RevokeResponse>) => {
             try {
                 const shouldStartWith = statusList.createCredentialUrl();
                 if (!request.body.list.startsWith(shouldStartWith)) {

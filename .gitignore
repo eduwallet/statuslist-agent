@@ -3,4 +3,4 @@ node_modules
 conf
 local.key
 yarn-error.log
-
+dist
