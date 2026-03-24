@@ -24,7 +24,7 @@ interface RevokeResponse {
 export function setStatus(statusList:StatusListType, router:Router) {
     router!.post('/api/status',
         passport.authenticate(statusList.name + '-admin', { session: false }),
-        async (request: Request<StatusRequest>, response: Response<StatusResponse>) => {
+        async (request: Request<StatusRequest>, response: Response<RevokeResponse>) => {
             try {
                 const shouldStartWith = statusList.createCredentialUrl();
                 if (!request.body.list.startsWith(shouldStartWith)) {
@@ -35,7 +35,7 @@ export function setStatus(statusList:StatusListType, router:Router) {
                 const mask = request.body.mask ? parseInt(request.body.mask) : -1;
                 const revokeState = await statusList.setState(list, parseInt(request.body.index), parseInt(request.body.status), mask);
                 response.status(200).end(JSON.stringify({status:revokeState}));
-            } catch (e) {
+            } catch {
                 response.status(404).end('List not found');
             }
         });

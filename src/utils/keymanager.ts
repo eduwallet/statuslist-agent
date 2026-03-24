@@ -1,3 +1,6 @@
+import Debug from 'debug';
+const debug = Debug('statuslist:keymanager');
+
 import fs from "fs";
 import { Factory, CryptoKey } from '@muisit/cryptokey';
 import { getDbConnection } from "../database";
@@ -42,18 +45,18 @@ export async function loadKey()
           const decodedKey = await pkey?.decodeKey();
           _key = await Factory.createFromType(dbKey.type, decodedKey);
           _did = result.did;
-          console.log('setting APP_DID to ', _did, ' from database');
+          debug('setting APP_DID to ', _did, ' from database');
           return;
         }
       }
       catch (e) {
-        console.log('Caught error initialising key from local database');
+        console.error('Caught error initialising key from local database', e);
       }
     }
   }
 
   try {
-    console.log('Loading key from local file');
+    debug('Loading key from local file');
     if (fs.existsSync('local.key')) {
       const object = JSON.parse(fs.readFileSync('local.key', 'utf8').toString()) as KeyData;
       _key = await Factory.createFromType(object.type, object.privateKeyHex);
@@ -61,7 +64,7 @@ export async function loadKey()
     }
   }
   catch (e) {
-    console.log('Parsing error in local key file', e);
+    console.error('Parsing error in local key file', e);
   }
 
   

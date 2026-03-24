@@ -14,7 +14,7 @@ export function loadJsonFiles<T>({path}: { path: string }): {
     const asArray: T[] = []
 
     fileNames.forEach((fileName: string) => {
-        let typeName = fileName.match(/(^.*?)\.json/)
+        const typeName = fileName.match(/(^.*?)\.json/)
         if (typeName) {
             const name = typeName[1]
             names.push(name)
@@ -28,7 +28,7 @@ export function loadJsonFiles<T>({path}: { path: string }): {
                 if (e instanceof Error) {
                     throw new Error(`An error occurred while reading JSON config file ${jsonFilePath}: ${e.message}`)
                 }
-                throw e
+                throw e;
             }
         }
     })

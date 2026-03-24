@@ -4,10 +4,13 @@ import express, { Express } from 'express'
 import { createConfiguration, deleteConfiguration, listConfigurations, storeConfiguration } from './lists';
 import { adminBearerToken, hasAdminBearerToken } from '@utils/adminBearerToken';
 import { getVersion } from './getVersion';
+import { exportConfig } from './exportConfig';
+
+type PassportCallback = (err:any, res:any) => void;
 
 function bearerAdminForAPI() {
     passport.use('admin-api', new Strategy(
-        function (token:string, done:Function) {
+        function (token:string, done:PassportCallback) {
             if (token == adminBearerToken()) {
                 return done(null, true);
             }
@@ -34,7 +37,11 @@ export async function createRoutesForAdmin(app:Express) {
         () => {
             setTimeout(() => { process.exit(0)}, 2000);
         }
-    )
+    );
+    router.get('/export',
+        passport.authenticate('admin-api', { session: false }),
+        exportConfig
+    );
 
     router.get('/lists', 
         passport.authenticate('admin-api', { session: false }),

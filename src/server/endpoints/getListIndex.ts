@@ -1,6 +1,4 @@
-import { getEnv } from '@utils/getEnv';
 import { Router, Request, Response } from 'express';
-import { stat } from 'fs';
 import moment from 'moment';
 import passport from 'passport';
 import { createStatusCredential } from 'server/lib/createStatusCredential';
@@ -33,7 +31,7 @@ export function getListIndex(statusList:StatusListType, router:Router) {
                 const date = moment(request.body.expirationDate).toDate();
                 const { list, index } = await statusList.newIndex(date);
 
-                var retval:ListIndexResponse = {
+                const retval:ListIndexResponse = {
                     credentialStatus: createStatusCredential(statusList, list, index),
                     index: index,
                     list: list.index,
@@ -41,7 +39,7 @@ export function getListIndex(statusList:StatusListType, router:Router) {
                     purpose: statusList.purpose
                 }
                 response.send(retval);
-            } catch (e) {
+            } catch {
                 response.status(500).end('Internal server error');
             }
         });

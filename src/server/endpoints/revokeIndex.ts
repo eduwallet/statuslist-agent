@@ -33,7 +33,7 @@ export function revokeIndex(statusList:StatusListType, router:Router) {
                 const list = await statusList.get(listIndex); // throws an exception if not found               
                 const revokeState = await statusList.revoke(list, parseInt(request.body.index), request.body.status == 'revoke');
                 response.status(200).end(JSON.stringify({status:revokeState}));
-            } catch (e) {
+            } catch {
                 response.status(404).end('List not found');
             }
         });

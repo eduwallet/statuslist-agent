@@ -10,35 +10,35 @@ import {
 @Entity('statuslistconf')
 export class Configuration extends BaseEntity {
     @PrimaryGeneratedColumn('increment')
-    //@ts-ignore
+    //@ts-expect-error has no initializer
     id: number;
     
     @Column('varchar')
-    //@ts-ignore
+    //@ts-expect-error has no initializer
     name: string
 
     @Column('text')
-    //@ts-ignore
+    //@ts-expect-error has no initializer
     tokens: text
 
     @Column('text')
-    //@ts-ignore
+    //@ts-expect-error has no initializer
     messages: text
 
     @Column('int')
-    //@ts-ignore
+    //@ts-expect-error has no initializer
     size: number
 
     @Column('int')
-    //@ts-ignore
+    //@ts-expect-error has no initializer
     bitsize: number
 
     @Column('varchar')
-    //@ts-ignore
+    //@ts-expect-error has no initializer
     purpose: string
 
     @Column('varchar')
-    //@ts-ignore
+    //@ts-expect-error has no initializer
     type: string
 
     @BeforeInsert()
@@ -53,10 +53,10 @@ export class Configuration extends BaseEntity {
     }
 
     @Column({ type: 'timestamp', select: true })
-    //@ts-ignore
+    //@ts-expect-error has no initializer
     saveDate: Date
 
     @Column({ type: 'timestamp', select: true })
-    //@ts-ignore
+    //@ts-expect-error has no initializer
     updateDate: Date
 }

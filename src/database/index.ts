@@ -6,7 +6,7 @@ import { getEnv } from '../utils/getEnv';
 const debug = Debug(`statuslist:db`)
 const schema = getEnv('DB_SCHEMA', 'statuslist');
 
-var dataSource:DataSource|null = null;
+let dataSource:DataSource|null = null;
 
 export const getDbConnection = async (): Promise<DataSource> => {
     if (dbConfig.synchronize) {

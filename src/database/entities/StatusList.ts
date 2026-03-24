@@ -10,35 +10,34 @@ import {
 @Entity('statuslist')
 export class StatusList extends BaseEntity {
     @PrimaryGeneratedColumn('increment')
-    //@ts-ignore
+    //@ts-expect-error has no initializer
     id: number;
     
     @Column('varchar')
-    //@ts-ignore
+    //@ts-expect-error has no initializer
     name: string
 
     @Column('int')
-    //@ts-ignore
+    //@ts-expect-error has no initializer
     index: number
 
     @Column('int')
-    //@ts-ignore
+    //@ts-expect-error has no initializer
     size: number
 
     @Column('int')
-    //@ts-ignore
+    //@ts-expect-error has no initializer
     used: number
 
     @Column({type: 'int', nullable:true})
-    //@ts-ignore
     bitsize?: number
 
     @Column('text')
-    //@ts-ignore
+    //@ts-expect-error has no initializer
     content: string
 
     @Column('text')
-    //@ts-ignore
+    //@ts-expect-error has no initializer
     revoked: string
 
     @Column({type: 'timestamp', nullable: true})
@@ -56,10 +55,10 @@ export class StatusList extends BaseEntity {
     }
 
     @Column({ type: 'timestamp', select: true })
-    //@ts-ignore
+    //@ts-expect-error has no initializer
     saveDate: Date
 
     @Column({ type: 'timestamp', select: true })
-    //@ts-ignore
+    //@ts-expect-error has no initializer
     updateDate: Date
 }

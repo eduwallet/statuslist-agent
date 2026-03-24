@@ -1,4 +1,4 @@
-import { vi, expect, test } from 'vitest';
+import { expect, test } from 'vitest';
 import { createStatusCredential } from '../createStatusCredential';
 import  {Bitstring} from '@digitalcredentials/bitstring';
 import { StatusList } from '#root/database/entities/StatusList';
@@ -7,8 +7,8 @@ import { getEnv } from '#root/utils/getEnv';
 
 async function createBasicStatusList(index: number, bitSize:number)
 {
-    let dataList = new Bitstring({length: 1000});
-    let contentList = new Bitstring({length: 1000 * bitSize});
+    const dataList = new Bitstring({length: 1000});
+    const contentList = new Bitstring({length: 1000 * bitSize});
     const lst = new StatusList();
     lst.size = 1000;
     lst.index = index;

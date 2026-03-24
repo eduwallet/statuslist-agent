@@ -51,13 +51,13 @@ async function setData(obj:Configuration, name:string, purpose:string, type:stri
     try {
         obj.tokens = JSON.stringify(JSON.parse(tokens));
     }
-    catch(e) {
+    catch {
         obj.tokens = [];
     }
     try {
         obj.messages = JSON.stringify(JSON.parse(messages));
     }
-    catch(e) {
+    catch {
         obj.messages = null;
     }
 }

@@ -8,7 +8,7 @@
     "rootDir": "./src",
     "rootDirs": ["./"],
     "paths": { "@utils/*": ["utils/*"]},
-    "typeRoots": ["./src/types"],
+    "typeRoots": ["./src/types", "./node_modules/@types"],
     "outDir": "dist",
     "declarationMap": true,
     "esModuleInterop": true,

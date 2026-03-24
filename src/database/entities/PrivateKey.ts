@@ -1,24 +1,23 @@
 import { Entity, Column, PrimaryColumn, BaseEntity } from 'typeorm'
-import { encrypt, decrypt } from '@futuretense/secret-box';
+import { decrypt } from '@futuretense/secret-box';
 import { fromString, toString } from "uint8arrays";
-import crypto from 'crypto';
 
 @Entity('private-key')
 export class PrivateKey extends BaseEntity {
   @PrimaryColumn('varchar')
-    // @ts-ignore
+  //@ts-expect-error has no initializer
   alias: string
 
   @Column('varchar')
-    // @ts-ignore
+  //@ts-expect-error has no initializer
   type: string
 
   @Column('varchar')
-    // @ts-ignore
+  //@ts-expect-error has no initializer
   privateKeyHex: string
 
   @Column('varchar')
-    // @ts-ignore
+  //@ts-expect-error has no initializer
   seed: string
 
   async decodeKey():Promise<string> {
