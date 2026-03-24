@@ -32,6 +32,7 @@ async function createBasicStatusList(bitSize:number)
 test("Creating VC", async () => {
     testkey = await Factory.createFromType('Ed25519', "fbe04e71bce89f37e0970de16a97a80c4457250c6fe0b1e9297e6df778ae72a8");
     const lst = await createBasicStatusList(2);
+    lst.updateDate = new Date('2020-01-01 01:02:03');
     // reserve a bit
     const dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:lst.content})});
     dataList.set(1, true);
@@ -68,6 +69,7 @@ test("Creating VC", async () => {
 test("Creating VC for Bitstring", async () => {
     testkey = await Factory.createFromType('Ed25519', "fbe04e71bce89f37e0970de16a97a80c4457250c6fe0b1e9297e6df778ae72a8");
     const lst = await createBasicStatusList(2);
+    lst.updateDate = new Date('2020-01-01 01:02:03');
     // reserve a bit
     const dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:lst.content})});
     dataList.set(1, true);
