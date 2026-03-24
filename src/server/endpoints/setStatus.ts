@@ -35,7 +35,7 @@ export function setStatus(statusList:StatusListType, router:Router) {
                 const mask = request.body.mask ? parseInt(request.body.mask) : -1;
                 const revokeState = await statusList.setState(list, parseInt(request.body.index), parseInt(request.body.status), mask);
                 response.status(200).end(JSON.stringify({status:revokeState}));
-            } catch (e) {
+            } catch {
                 response.status(404).end('List not found');
             }
         });

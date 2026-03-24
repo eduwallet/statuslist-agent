@@ -3,7 +3,6 @@ import express, { Router } from 'express';
 import morgan from 'morgan'
 import cors, { CorsOptions } from 'cors'
 import bodyParser from 'body-parser';
-import { createHttpTerminator } from 'http-terminator'
 import { getEnv } from '@utils/getEnv';
 import { dumpExpressRoutes } from './dumpExpressRoutes';
 import { getStatusListStore } from 'statusLists/StatusListStore';

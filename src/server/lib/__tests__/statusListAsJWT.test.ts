@@ -18,8 +18,8 @@ import { statusListAsJWT } from '../statusListAsJWT';
 
 async function createBasicStatusList(bitSize:number)
 {
-    let dataList = new Bitstring({length: 1000});
-    let contentList = new Bitstring({length: 1000 * bitSize});
+    const dataList = new Bitstring({length: 1000});
+    const contentList = new Bitstring({length: 1000 * bitSize});
     const lst = new StatusList();
     lst.size = 1000;
     lst.bitsize = bitSize;
@@ -32,7 +32,7 @@ test("Creating JWT", async () => {
     testkey = await Factory.createFromType('Ed25519', "fbe04e71bce89f37e0970de16a97a80c4457250c6fe0b1e9297e6df778ae72a8");
     const lst = await createBasicStatusList(2);
     // reserve a bit
-    var dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:lst.content})});
+    const dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:lst.content})});
     dataList.set(1, true);
     dataList.set(6, true);
     dataList.set(21, true);

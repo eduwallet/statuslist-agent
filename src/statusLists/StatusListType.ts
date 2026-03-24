@@ -134,9 +134,9 @@ export class StatusListType implements StatusListInterface {
         list.size = this.size;
         list.used = 0;
         list.bitsize = this.bitSize ?? 1;
-        var dataList = new Bitstring({length: list.size});
+        const dataList = new Bitstring({length: list.size});
         list.content = await dataList.encodeBits();
-        var contentList = new Bitstring({length: list.size * list.bitsize});
+        const contentList = new Bitstring({length: list.size * list.bitsize});
         list.revoked = await contentList.encodeBits();
         await repo.save(list); // create the list id, but this may be superfluous
 
@@ -150,10 +150,10 @@ export class StatusListType implements StatusListInterface {
     {
         debug("returning new index from list");
         // look in the 'content' list to see if we have a spot available
-        var dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:list.content})});
+        const dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:list.content})});
 
-        var index = -1;
-        var tries = 10000;
+        let index = -1;
+        let tries = 10000;
         while (index < 0 && tries > 0) {
             tries -= 1;
             index = Math.floor(Math.random() * list.size);
@@ -226,7 +226,7 @@ export class StatusListType implements StatusListInterface {
         const dataList = new Bitstring({buffer:await Bitstring.decodeBits({encoded:list.content})});
         const revokeList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:list.revoked})});
 
-        var retval:string = 'UNKNOWN';
+        let retval:string = 'UNKNOWN';
 
         // mask out the bits that are not relevant
         // use the bitsize of the database entry instead of the default-size-for-new-lists defined on 
@@ -260,8 +260,8 @@ export class StatusListType implements StatusListInterface {
     }
 
     public async getState(list:StatusList, index:number) {
-        var dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:list.content})});
-        var revokeList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:list.revoked})});
+        const dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:list.content})});
+        const revokeList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:list.revoked})});
 
         if (dataList.get(index)) {
             return this.getStateValue(revokeList, index, list.bitsize ?? 1);

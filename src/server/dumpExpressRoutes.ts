@@ -19,7 +19,7 @@ function print (path:any, layer:any) {
     } else if (thing?.fast_slash) {
       return ''
     } else if(thing) {
-      var match = thing.toString()
+      const match = thing.toString()
         .replace('\\/?', '')
         .replace('(?=\\/|$)', '$')
         .match(/^\/\^((?:\\[.*+?^${}()|[\]\\\/]|[^.*+?^${}()|[\]\\\/])*)\$\//)

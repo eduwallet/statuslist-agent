@@ -6,8 +6,8 @@ vi.mock('../../database/index', () => import('../../database/__mocks__/index'));
 
 async function createBasicStatusList(bitSize:number)
 {
-    let dataList = new Bitstring({length: 1000});
-    let contentList = new Bitstring({length: 1000 * bitSize});
+    const dataList = new Bitstring({length: 1000});
+    const contentList = new Bitstring({length: 1000 * bitSize});
     const lst = new StatusList();
     lst.size = 1000;
     lst.bitsize = bitSize;
@@ -20,7 +20,7 @@ async function createBasicStatusList(bitSize:number)
 test("Setting bits", async () => {
     const lst = await createBasicStatusList(1);
     // reserve a bit
-    var dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:lst.content})});
+    const dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:lst.content})});
     dataList.set(1, true);
     // update the list content
     lst.content = await dataList.encodeBits();
@@ -54,7 +54,7 @@ test("Using revoke", async () => {
     const lst = await createBasicStatusList(1);
 
     // reserve a bit
-    var dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:lst.content})});
+    const dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:lst.content})});
     dataList.set(1, true);
     // update the list content
     lst.content = await dataList.encodeBits();
@@ -88,7 +88,7 @@ test("Bitsize 2", async () => {
     const lst = await createBasicStatusList(2);
 
     // reserve a bit
-    var dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:lst.content})});
+    const dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:lst.content})});
     dataList.set(1, true);
     // update the list content
     lst.content = await dataList.encodeBits();
@@ -152,7 +152,7 @@ test("Bitsize 3", async () => {
     const lst = await createBasicStatusList(3);
 
     // reserve a bit
-    var dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:lst.content})});
+    const dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:lst.content})});
     dataList.set(1, true);
     // update the list content
     lst.content = await dataList.encodeBits();
@@ -216,7 +216,7 @@ test("Bitsize 4", async () => {
     const lst = await createBasicStatusList(4);
 
     // reserve a bit
-    var dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:lst.content})});
+    const dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:lst.content})});
     dataList.set(1, true);
     dataList.set(5, true);
     dataList.set(17, true);
@@ -286,7 +286,7 @@ test("Use correct index", async () => {
     const lst = await createBasicStatusList(4);
 
     // reserve a bit
-    var dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:lst.content})});
+    const dataList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:lst.content})});
     dataList.set(1, true);
     dataList.set(2, true);
     dataList.set(3, true);
@@ -385,5 +385,4 @@ test("Use correct index", async () => {
     expect(value).toBe(3);
     value = await Stype.getState(lst, 13);
     expect(value).toBe(3);
-
 });

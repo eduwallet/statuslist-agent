@@ -1,5 +1,5 @@
 
-import { MigrationInterface, QueryRunner, Table, TableColumn } from 'typeorm'
+import { MigrationInterface, QueryRunner, TableColumn } from 'typeorm'
 
 export class M20250616_bitsize_1750076960000 implements MigrationInterface {
 

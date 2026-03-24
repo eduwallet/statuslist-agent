@@ -19,7 +19,7 @@ export async function statusListAsVC(data:StatusListStatus)
 
     debug("Issuing status list credential as VC for list of updateDate", data.statusList.updateDate, moment(data.statusList.updateDate).format(moment.defaultFormatUtc));
 
-    var statusListCredential:any = {
+    const statusListCredential:any = {
         "@context": ["https://www.w3.org/ns/credentials/v2"],
         "id": data.basepath,
         "type": ["VerifiableCredential", data.type.getCredentialType()],

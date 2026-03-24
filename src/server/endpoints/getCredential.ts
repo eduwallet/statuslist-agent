@@ -34,7 +34,7 @@ export function getCredential(statusList:StatusListType, router:Router) {
                 response.setHeader('Content-type', 'application/statuslist+jwt');
                 response.send(result);
 
-            } catch (e) {
+            } catch {
                 response.status(404).end('List not found');
             }
         });

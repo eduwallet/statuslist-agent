@@ -28,7 +28,7 @@ export function getStatus(statusList:StatusListType, router:Router) {
                 else {
                     response.status(200).end(JSON.stringify({"status":state}));
                 }
-            } catch (e) {
+            } catch {
                 response.status(404).end('List not found');
             }
         });

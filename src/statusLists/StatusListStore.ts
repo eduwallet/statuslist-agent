@@ -13,7 +13,7 @@ interface StatusListStore {
     [x:string]: StatusListType;
 }
 
-var _store:StatusListStore = {};
+const _store:StatusListStore = {};
 
 export function getStatusListStore(): StatusListStore {
     return _store;
@@ -82,7 +82,7 @@ async function readFromFile()
             }    
         }
         catch (e) {
-            debug("Missing conf path for status list configurations");
+            debug("Missing conf path for status list configurations", e);
         }
     }
     catch (e) {
