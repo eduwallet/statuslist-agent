@@ -67,14 +67,16 @@
     "passport-http-bearer": "^1.0.1",
     "pg": "^8.12.0",
     "ts-node": "^10.9.2",
-    "typeorm": "^0.3.28",
+    "typeorm": "1",
     "typescript": "^5.8.3",
     "uint8arrays": "^5.1.0",
-    "uuid": "^11.1.0",
+    "uuid": "^13",
     "zlib": "^1.0.5"
   },
   "resolutions": {
-    "qs": "6.14.2",
-    "diff": "4.0.4"
+    "qs": "6.15.2",
+    "diff": "4.0.4",
+    "brace-expansion": "5.0.6",
+    "path-to-regexp": "8.4.0"
   }
 }
