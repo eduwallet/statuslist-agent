@@ -2,7 +2,7 @@
 
 The StatusList Agent serves status-lists according to the following specifications:
 
-- IETF Token Status Lists: <https://datatracker.ietf.org/doc/draft-ietf-oauth-status-list/11/>
+- IETF Token Status Lists: <https://datatracker.ietf.org/doc/draft-ietf-oauth-status-list/15/>
 - W3C BitstringStatus: <https://www.w3.org/TR/vc-bitstring-status-list/>
 - W3C StatusList: <https://github.com/w3c/vc-bitstring-status-list> (an older version of the above)
 
@@ -69,7 +69,7 @@ Statuslists are configured in the `conf/lists` directory using a separate config
     "name": "path name for this statuslist, excluding the initial slash",
     "tokens": ["array of allowed administrative bearer tokens for admin api"],
     "size": <numeric value of the number of bits, in steps of 8, greater or equal to 131072>,
-    "bitSize": <optional size of each reserved bit, 1 by default>,
+    "bitSize": <optional size of each reserved bit, 1 by default; for the statuslist+jwt type it must be 1, 2, 4 or 8>,
     "purpose": "list purpose, one of revocation, suspension, message or any business case specific value",
     "type": "type of this implementation".
     "messages": [<optional list of status list messages according to the BitstringStatusList definition>]
@@ -311,7 +311,7 @@ For statuslists with a larger bit size, the `status` response field is an intege
 
 ### Statuslist Credentials
 
-The credential request interface returns a JWT depending on the configured type of the statuslist.
+The credential request interface returns a JWT depending on the configured type of the statuslist. The IETF `statuslist+jwt` type is served with content-type `application/statuslist+jwt`; the W3C types are served as a signed JWT with content-type `application/jwt`.
 
 `GET /<statuslist-name>/<index>`
 
@@ -332,7 +332,7 @@ The IETF Token Status List returns a JWT with a `status_list` claim:
 }
 ```
 
-The `encoded status` is a base64url encoded, zlib compressed representation of the bit string content.
+The `encoded status` is a base64url encoded, zlib (DEFLATE) compressed representation of the bit string content. Per `draft-ietf-oauth-status-list` §4.1 the status blocks are packed **least-significant-bit first** (index 0 in bit 0 of the first byte), which differs from the MSB-first packing used by the W3C encoders below.
 
 The W3C implementations return a Virtual Credential JWT with a `credentialSubject` claim:
 
@@ -356,6 +356,7 @@ The W3C BitstringStatusList implementation has credential type 'BitstringStatusL
 
 | Version | Commit  | Date       | Comment             |
 | ------- | ------- | ---------- | ------------------- |
+|         |         | 2026-07-09 | IETF `statuslist+jwt` now packs the bit array LSB-first per `draft-ietf-oauth-status-list` §4.1 (was MSB-first, causing compliant wallets to read revoked credentials as valid); `bits` restricted to 1/2/4/8 and taken from the stored list; W3C credentials served as `application/jwt` |
 |  v1.3.4 | 4f3c76a | 2026-01-28 | Implementation of `/api/export` to export the status list configuration as zip archive |
 |  v1.3.3 | bbc92b5 | 2026-01-06 | Setting IssuedAt and iat based on the last-updated value of the status list to avoid clock skew issues |
 |  v1.3.2 | 68bc04e | 2025-11-25 | Implemented `/api/version` to display package and node version and git tag and commit number |

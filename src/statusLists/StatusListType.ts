@@ -30,6 +30,12 @@ export class StatusListType implements StatusListInterface {
         this.bitSize = opts.bitSize ?? 1;
         this.messages = opts.messages;
 
+        // IETF Token Status List (draft-ietf-oauth-status-list §4.1): bits MUST be 1, 2, 4 or 8.
+        // Fail fast so a misconfigured list can never serve a corrupt statuslist+jwt token.
+        if (this.type === 'statuslist+jwt' && ![1, 2, 4, 8].includes(this.bitSize)) {
+            throw new Error(`statuslist+jwt requires bits of 1, 2, 4 or 8, got ${this.bitSize}`);
+        }
+
         this.id = getEnv('BASEURL', '') + '/' + this.name;
         this.lists = [];
     }
@@ -279,6 +285,9 @@ export class StatusListType implements StatusListInterface {
         // so re-pack each index's value LSB-first here before deflate. Blocks never cross a byte
         // boundary because bitsize divides 8 (1, 2, 4, 8).
         const bitSize = list.bitsize ?? 1;
+        if (![1, 2, 4, 8].includes(bitSize)) {
+            throw new Error(`statuslist+jwt requires bits of 1, 2, 4 or 8, got ${bitSize}`);
+        }
         const revokeList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:list.revoked})});
         const out = new Uint8Array(Math.ceil((list.size * bitSize) / 8));
         for (let i = 0; i < list.size; i++) {

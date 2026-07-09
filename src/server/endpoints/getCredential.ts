@@ -31,7 +31,8 @@ export function getCredential(statusList:StatusListType, router:Router) {
                         result = await statusListAsJWT(status);
                         break;
                 }
-                response.setHeader('Content-type', 'application/statuslist+jwt');
+                // W3C VC is served as a bare signed JWT; upgrade to application/vc+jwt if a consumer needs the VC-specific type
+                response.setHeader('Content-type', statusList.type === 'statuslist+jwt' ? 'application/statuslist+jwt' : 'application/jwt');
                 response.send(result);
 
             } catch {

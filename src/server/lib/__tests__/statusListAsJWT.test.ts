@@ -97,6 +97,7 @@ test("Creating JWT", async () => {
 
     const jwt = await statusListAsJWT(status);
     expect(jwt).toBeDefined();
-    // LSB-first (IETF §4.1) token. Decodes back to idx1=1,6=2,21=3,203=0,547=2,872=1.
-    expect(jwt).toBe('eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDp3ZWI6ZXhhbXBsZS5jb20jMCIsInR5cCI6InN0YXR1c2xpc3Qrand0In0.eyJpc3MiOiJkaWQ6d2ViOmV4YW1wbGUuY29tIiwiZXhwIjoxNTc3ODM3ODIzLCJpYXQiOjE1Nzc4MzY5MjMsInN1YiI6Imh0dHBzOi8vZXhhbXBsZS5jb20iLCJ0dGwiOjMwMCwic3RhdHVzX2xpc3QiOnsiYml0cyI6MSwibHN0IjoiZUp4alVXQmdZT0JoR0hEUVFIVVRHUW5JQXdCb25nQ3kifX0.tCgCgxw-PClRf8K2h3ZA0NIY6Fc0cRNrEa8-1CgEsdmZKgLqGwqsPiwfa2OmirhGIoe3Hz3OH8Il4F4OhBfCCg');
+    // LSB-first (IETF §4.1) token. bits=2 matches the stored list bitsize; decodes back to
+    // idx1=1,6=2,21=3,203=0,547=2,872=1.
+    expect(jwt).toBe('eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDp3ZWI6ZXhhbXBsZS5jb20jMCIsInR5cCI6InN0YXR1c2xpc3Qrand0In0.eyJpc3MiOiJkaWQ6d2ViOmV4YW1wbGUuY29tIiwiZXhwIjoxNTc3ODM3ODIzLCJpYXQiOjE1Nzc4MzY5MjMsInN1YiI6Imh0dHBzOi8vZXhhbXBsZS5jb20iLCJ0dGwiOjMwMCwic3RhdHVzX2xpc3QiOnsiYml0cyI6MiwibHN0IjoiZUp4alVXQmdZT0JoR0hEUVFIVVRHUW5JQXdCb25nQ3kifX0.4beso9h5i_uqX-oGTeuqDgqgcWRPJ0GAdT889oecuwrOfNeEqa0le-Np0Ir2gbp6i5iDYeScRrQpuolhz4nqCA');
 });
