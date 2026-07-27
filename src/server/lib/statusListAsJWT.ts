@@ -26,7 +26,9 @@ export async function statusListAsJWT(data:StatusListStatus)
         sub: data.basepath, // sub must specify the uri of the status list token
         ttl: 5 * 60, // maximum time to cache
         status_list: {
-            bits: data.type.bitSize,
+            // bits MUST match the width the bytes were actually packed at (the stored list),
+            // not the type's current default, which can drift after a config change.
+            bits: data.statusList.bitsize ?? 1,
             // the spec defines this as a base64url encoded zlib (RC1950) compressed bit array
             // the bitstring library we use uses a gzip compression by default
             lst: await StatusListType.toZlibCompression(data.statusList)

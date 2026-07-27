@@ -1,0 +1,45 @@
+services:
+  statuslist-agent:
+    build:
+      context: .
+    container_name: statuslist-agent
+    restart: unless-stopped
+    ports:
+      - "9156:9156"
+    volumes:
+      - ./src:/app/src:ro
+      - ./conf:/conf:ro
+      - /dev/null:/app/.env:ro # do not read the host .env; set vars explicitly
+    environment:
+      - NODE_ENV=development
+      - PORT=9156
+      - LISTEN_ADDRESS=0.0.0.0
+      - BASEURL=http://localhost:9156
+      - CONF_PATH=/conf
+      - DB_HOST=db
+      - DB_USER=postgres
+      - DB_PASSWORD=this-is-not-secure
+      - DB_NAME=postgres
+      - DB_SCHEMA=statuslist
+      - KEY_FILE=local.key
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-bookworm
+    container_name: statuslist-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=this-is-not-secure
+      - POSTGRES_DB=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 2s
+      retries: 5
+      start_period: 1s
+      timeout: 5s
+    ports:
+      - "5432:5432"

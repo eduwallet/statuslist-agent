@@ -30,6 +30,12 @@ export class StatusListType implements StatusListInterface {
         this.bitSize = opts.bitSize ?? 1;
         this.messages = opts.messages;
 
+        // IETF Token Status List (draft-ietf-oauth-status-list §4.1): bits MUST be 1, 2, 4 or 8.
+        // Fail fast so a misconfigured list can never serve a corrupt statuslist+jwt token.
+        if (this.type === 'statuslist+jwt' && ![1, 2, 4, 8].includes(this.bitSize)) {
+            throw new Error(`statuslist+jwt requires bits of 1, 2, 4 or 8, got ${this.bitSize}`);
+        }
+
         this.id = getEnv('BASEURL', '') + '/' + this.name;
         this.lists = [];
     }
@@ -201,7 +207,7 @@ export class StatusListType implements StatusListInterface {
         return state;
     }
 
-    private getStateValue(bitString:Bitstring, index:number, bitSize:number)
+    private static getStateValue(bitString:Bitstring, index:number, bitSize:number)
     {
         let retval:number = 0;
         for(let i = 0;i < bitSize; i++) {
@@ -236,7 +242,7 @@ export class StatusListType implements StatusListInterface {
         newState = newState & bitSizeMask;
 
         if (dataList.get(index)) {
-            const state = this.getStateValue(revokeList, index, list.bitsize ?? 1);
+            const state = StatusListType.getStateValue(revokeList, index, list.bitsize ?? 1);
             if ((state & mask) == (newState & mask)) {
                 retval = 'UNCHANGED';
             }
@@ -264,7 +270,7 @@ export class StatusListType implements StatusListInterface {
         const revokeList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:list.revoked})});
 
         if (dataList.get(index)) {
-            return this.getStateValue(revokeList, index, list.bitsize ?? 1);
+            return StatusListType.getStateValue(revokeList, index, list.bitsize ?? 1);
         }
         else {
             throw new Error("Credential is not enabled");
@@ -273,8 +279,23 @@ export class StatusListType implements StatusListInterface {
     
     public static async toZlibCompression(list:StatusList)
     {
-        const buffer = await Bitstring.decodeBits({encoded:list.revoked})
-        return toString(deflateSync(buffer), 'base64url');
+        // IETF Token Status List (draft-ietf-oauth-status-list §4.1) packs status blocks
+        // LSB-first ("from the least significant bit ('0') to the most significant bit ('7')").
+        // The stored `revoked` bitstring is W3C-encoded (MSB-first via @digitalcredentials/bitstring),
+        // so re-pack each index's value LSB-first here before deflate. Blocks never cross a byte
+        // boundary because bitsize divides 8 (1, 2, 4, 8).
+        const bitSize = list.bitsize ?? 1;
+        if (![1, 2, 4, 8].includes(bitSize)) {
+            throw new Error(`statuslist+jwt requires bits of 1, 2, 4 or 8, got ${bitSize}`);
+        }
+        const revokeList = new Bitstring({buffer: await Bitstring.decodeBits({encoded:list.revoked})});
+        const out = new Uint8Array(Math.ceil((list.size * bitSize) / 8));
+        for (let i = 0; i < list.size; i++) {
+            const value = StatusListType.getStateValue(revokeList, i, bitSize) & ((1 << bitSize) - 1);
+            const bitpos = i * bitSize;
+            out[bitpos >> 3] |= value << (bitpos & 7);
+        }
+        return toString(deflateSync(out), 'base64url');
     }
 
     // this routine is not used, but it is here for completeness sake
