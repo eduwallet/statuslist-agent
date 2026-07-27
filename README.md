@@ -84,6 +84,28 @@ The implementation `type` can be one of the following:
 
 The main difference between the BitstringStatusList definition and its older versions are the multibase-encoded token list. The newer version prefixes it with a 'u' to indicate the string contains a base64-url-non-padded encoded byte array. The older versions also only allow a bitsize of 1 in the definition.
 
+## Docker
+
+The agent ships with a `Dockerfile` and a `docker-compose.yml` for local development.
+
+### Build the image locally
+
+```bash
+docker build -t statuslist-agent .
+```
+
+### Local development with a bundled Postgres
+
+```bash
+docker compose up --build
+```
+
+This starts the agent on `http://localhost:9156` and a Postgres database on `5432`. Before starting, provide your list definitions under `conf/lists/*.json` (mounted read-only at `/conf`) and a key: either mount a `local.key` file (keeping `KEY_FILE=local.key`) or drop `KEY_FILE` and set `APP_KEY` plus `APP_DID` in the compose `environment` block (see the [Key Configuration](#key-configuration) section).
+
+### Published images
+
+On a GitHub release (or a manual `workflow_dispatch`), the `.github/workflows/delivery.yml` workflow builds and pushes `ghcr.io/privacybydesign/statuslist-agent`, tagged from the release version.
+
 ## Endpoints
 
 The statuslist agent the following endpoints:
