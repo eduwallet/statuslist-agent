@@ -1,10 +1,8 @@
 import Debug from 'debug'
 import { DataSource } from 'typeorm'
 import { dbConfig } from './config';
-import { getEnv } from '../utils/getEnv';
 
 const debug = Debug(`statuslist:db`)
-const schema = getEnv('DB_SCHEMA', 'statuslist');
 
 let dataSource:DataSource|null = null;
 
@@ -14,7 +12,7 @@ export const getDbConnection = async (): Promise<DataSource> => {
     }
 
     if (!dataSource) {
-        dataSource = await new DataSource({ ...dbConfig, name: schema }).initialize()
+        dataSource = await new DataSource({ ...dbConfig }).initialize()
 
         if (dbConfig.migrationsRun) {
             debug(`Migrations are currently managed from config. Please set migrationsRun and synchronize to false to get consistent behaviour. We run migrations from code explicitly`);

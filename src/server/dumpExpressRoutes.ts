@@ -22,7 +22,7 @@ function print (path:any, layer:any) {
       const match = thing.toString()
         .replace('\\/?', '')
         .replace('(?=\\/|$)', '$')
-        .match(/^\/\^((?:\\[.*+?^${}()|[\]\\\/]|[^.*+?^${}()|[\]\\\/])*)\$\//)
+        .match(/^\/\^((?:\\[.*+?^${}()|[\]\\/]|[^.*+?^${}()|[\]\\/])*)\$\//)
       return match
         ? match[1].replace(/\\(.)/g, '$1').split('/')
         : '<complex:' + thing.toString() + '>'

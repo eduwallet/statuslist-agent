@@ -1,5 +1,5 @@
 import { getEnv } from '../utils/getEnv';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
+import { PostgresDataSourceOptions } from 'typeorm/driver/postgres/PostgresDataSourceOptions'
 import { StatusList } from './entities/StatusList';
 import { migrations } from './migrations';
 import { Configuration } from './entities/Configuration';
@@ -14,7 +14,7 @@ const password = getEnv('DB_PASSWORD', 'postgres');
 const port = parseInt(getEnv('DB_PORT','5432'));
 const host = getEnv('DB_HOST', 'localhost');
 
-export const dbConfig: PostgresConnectionOptions = {
+export const dbConfig: PostgresDataSourceOptions = {
     type: 'postgres',
     schema: schema,
     host: host,

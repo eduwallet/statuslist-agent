@@ -328,12 +328,12 @@ test("Use correct index", async () => {
     value = await Stype.getState(lst, 6);
     expect(value).toBe(0);
 
-    let action = await Stype.setState(lst, 1, 15);
-    action = await Stype.setState(lst, 2, 0);
-    action = await Stype.setState(lst, 3, 15);
-    action = await Stype.setState(lst, 4, 0);
-    action = await Stype.setState(lst, 5, 15);
-    action = await Stype.setState(lst, 6, 0);
+    await Stype.setState(lst, 1, 15);
+    await Stype.setState(lst, 2, 0);
+    await Stype.setState(lst, 3, 15);
+    await Stype.setState(lst, 4, 0);
+    await Stype.setState(lst, 5, 15);
+    await Stype.setState(lst, 6, 0);
 
     value = await Stype.getState(lst, 1);
     expect(value).toBe(15);
@@ -348,12 +348,12 @@ test("Use correct index", async () => {
     value = await Stype.getState(lst, 6);
     expect(value).toBe(0);
 
-    action = await Stype.setState(lst, 1, 0);
-    action = await Stype.setState(lst, 2, 15);
-    action = await Stype.setState(lst, 3, 0);
-    action = await Stype.setState(lst, 4, 15);
-    action = await Stype.setState(lst, 5, 0);
-    action = await Stype.setState(lst, 6, 15);
+    await Stype.setState(lst, 1, 0);
+    await Stype.setState(lst, 2, 15);
+    await Stype.setState(lst, 3, 0);
+    await Stype.setState(lst, 4, 15);
+    await Stype.setState(lst, 5, 0);
+    await Stype.setState(lst, 6, 15);
 
     value = await Stype.getState(lst, 1);
     expect(value).toBe(0);
